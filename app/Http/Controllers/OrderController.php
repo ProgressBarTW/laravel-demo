@@ -54,6 +54,7 @@ class OrderController extends Controller
 
                 $tradeInfoJSONString = $this->create_aes_decrypt($tradeInfo, $hashKey, $hashIV); 
                 $tradeInfoAry = json_decode($tradeInfoJSONString, true);
+                var_dump($tradeInfoAry );
                 if (
                     $tradeInfoAry["Status"] == 'SUCCESS' &&
                     $tradeInfoAry["Result"]["RespondCode"] == '00' &&
@@ -63,12 +64,12 @@ class OrderController extends Controller
                     $order = Order::where('order_number', $merchantOrderNo)->first();
                     if ($order){
                         $order->setToPaid();
-                        return redirect()->route('orders.success');
+                        // return redirect()->route('orders.success');
                     }
                 }
         }
 
-        // return redirect('/')->withErrors("MPG 錯誤 $status");
+        return redirect('/')->withErrors("MPG 錯誤 $status");
     }
 
     public function success(Request $request){
