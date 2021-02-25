@@ -51,10 +51,20 @@ class OrderController extends Controller
                 $tradeSha == $tradeShaForTest
             ){
 
-                $tradeInfoAry = $this->create_aes_decrypt($tradeInfo, $hashKey, $hashIV); 
-
-                var_dump($tradeInfoAry);
-                // return redirect()->route('orders.success');
+                $tradeInfoJSONString = $this->create_aes_decrypt($tradeInfo, $hashKey, $hashIV); 
+                $tradeInfoAry = json_decode($tradeInfoJSONString);
+                if (
+                    $tradeInfoAry["Status"] == 'SUCCESS' &&
+                    $tradeInfoAry["Result"]["RespondCode"] == '00' &&
+                    $tradeInfoAry["Result"]["PaymentMethod"] == 'CREDIT' 
+                ){
+                    $merchantOrderNo = $tradeInfoAry["Result"]["MerchantOrderNo"];
+                    $order = Order::where('order_number', $merchantOrderNo)->first();
+                    if ($order){
+                        $order->setToPaid();
+                        return redirect()->route('orders.success');
+                    }
+                }
         }
 
         // return redirect('/')->withErrors("MPG 錯誤 $status");

@@ -32,8 +32,7 @@ class CartController extends Controller
             return redirect()->route('cart.index')->withErrors('購物車是空的');
         }
         
-        $hashKey = env('MPG_HashKey', '');
-        $hashIV = env('MPG_HashIV', '');
+ 
         $expireDaysToPlus = env('MPG_ExpireDate', '');
         $tradeInfoAry = [
             'MerchantID' => env('MPG_MerchantID', ''),

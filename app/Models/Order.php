@@ -67,4 +67,10 @@ class Order extends Model
     {
         return 'order_number';
     }
+
+    public function setToPaid()
+    {
+        $this->order_status = Order::orderStatusesIndex(self::PAID);
+        $this->save();
+    }
 }
