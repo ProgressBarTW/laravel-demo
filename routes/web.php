@@ -61,10 +61,10 @@ Route::prefix('cart')->name('cart.')->group(function(){
 
 Route::prefix('orders')->name('orders.')->group(function(){
     Route::get('/success', [OrderController::class, 'success'])->name('success');
+    Route::get('/not_finished', [OrderController::class, 'not_finished'])->name('not_finished');
     Route::post('/mpg_return', [OrderController::class, 'mpg_return'])->name('mpg_return');
     Route::post('/pendingPaymentType', [OrderController::class, 'pendingPaymentType'])->name('pendingPaymentType');
     Route::post('/notify', [OrderController::class, 'notify'])->name('notify');
-
 });
 
 // == logged in ==

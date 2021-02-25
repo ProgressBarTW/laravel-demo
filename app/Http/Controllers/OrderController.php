@@ -91,7 +91,8 @@ class OrderController extends Controller
                 $order = Order::where('order_number', $merchantOrderNo)->first();
                 if ($order){
                     $order->setToPending();
-                    return redirect()->route('orders.success');
+                    var_dump($result);
+                    return redirect()->route('orders.not_finished');
                 }
             }
         }
