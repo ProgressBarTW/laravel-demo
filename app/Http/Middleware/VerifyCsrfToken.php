@@ -13,6 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         '/orders/mpg_return',
-        // '/orders/notify'
+        '/orders//orders/pendingPaymentType',
+        '/orders/notify'
     ];
 }
