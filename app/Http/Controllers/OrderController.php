@@ -37,6 +37,11 @@ class OrderController extends Controller
         ]);
     }
 
+    public function not_finished(Request $request){
+        return view('orders.not_finished', [
+        ]);
+    }
+
     public function mpg_return(Request $request){
         $result = $this->validateMPGCallbackValues($request);
         if ( is_array($result)){     
