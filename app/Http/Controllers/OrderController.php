@@ -49,7 +49,8 @@ class OrderController extends Controller
         if ( is_array($result)){     
             if (
                 $result["PaymentType"] == 'CREDIT' &&
-                $result["RespondCode"] == '00' 
+                $result["RespondCode"] == '00' &&
+                isset($result["PayTime"])
             ){
                 $merchantOrderNo = $result["MerchantOrderNo"];
                 $order = Order::where('order_number', $merchantOrderNo)->first();
@@ -59,7 +60,8 @@ class OrderController extends Controller
                     return redirect()->route('orders.success');
                 }
             } else if (
-                $result["PaymentType"] == 'WEBATM'
+                $result["PaymentType"] == 'WEBATM' &&
+                isset($result["PayTime"])
             ){
                 $merchantOrderNo = $result["MerchantOrderNo"];
                 $order = Order::where('order_number', $merchantOrderNo)->first();
@@ -70,7 +72,7 @@ class OrderController extends Controller
                 }
             }
         }
-        return redirect('/')->withErrors("MPG 錯誤 $status");
+        return redirect('/')->withErrors($result);
     }
 
     public function notify(Request $request){
@@ -81,7 +83,16 @@ class OrderController extends Controller
             $merchantOrderNo = $result["MerchantOrderNo"];
             $order = Order::where('order_number', $merchantOrderNo)->first();
             if ($order){
-                $order->setToPaid();
+                if (
+                    in_array($result["PaymentType"], [
+                        'VACC',
+                        'CVS',
+                        'BARCODE',
+                    ]) &&
+                    isset($result["PayTime"])
+                ){
+                    $order->setToPaid();
+                }
             }
             return;
         }
