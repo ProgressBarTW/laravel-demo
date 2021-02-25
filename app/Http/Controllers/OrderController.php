@@ -32,59 +32,74 @@ class OrderController extends Controller
         ]);
     }
 
-    public function mpg_return(Request $request){
-
-        $status = $request->input('Status');
-        $merchantID = $request->input('MerchantID');
-        $version = $request->input('Version');
-        $tradeInfo = $request->input('TradeInfo');
-        $tradeSha = $request->input('TradeSha');
-
-        $hashKey = env('MPG_HashKey', '');
-        $hashIV = env('MPG_HashIV', '');
-        $tradeShaForTest = strtoupper(hash("sha256", "HashKey={$hashKey}&{$tradeInfo}&HashIV={$hashIV}"));
-
-
-        
-        if (    $status == 'SUCCESS' && 
-                $merchantID == env('MPG_MerchantID') &&
-                $version == env('MPG_Version') &&
-                $tradeSha == $tradeShaForTest
-            ){
-
-                $tradeInfoJSONString = $this->create_aes_decrypt($tradeInfo, $hashKey, $hashIV); 
-                $tradeInfoAry = json_decode($tradeInfoJSONString, true);
-
-                if (
-                    $tradeInfoAry["Result"]["PaymentType"] == 'CREDIT' &&
-                    $tradeInfoAry["Result"]["RespondCode"] == '00' 
-                ){
-                    $merchantOrderNo = $tradeInfoAry["Result"]["MerchantOrderNo"];
-                    $order = Order::where('order_number', $merchantOrderNo)->first();
-                    if ($order){
-                        $order->setToPaid();
-                        return redirect()->route('orders.success');
-                    }
-                } else if (
-                    $tradeInfoAry["Result"]["PaymentType"] == 'WEBATM'
-                ){
-
-                }
-        }
-
-        // return redirect('/')->withErrors("MPG 錯誤 $status");
-    }
-
     public function success(Request $request){
         return view('orders.success', [
         ]);
     }
 
-    public function notify(Request $request){
+    public function mpg_return(Request $request){
+        $result = $this->validateMPGCallbackValues($request);
+        if ( is_array($result)){     
+            if (
+                $result["PaymentType"] == 'CREDIT' &&
+                $result["RespondCode"] == '00' 
+            ){
+                $merchantOrderNo = $result["MerchantOrderNo"];
+                $order = Order::where('order_number', $merchantOrderNo)->first();
+                if ($order){
+                    $order->setToPaid();
+                    return redirect()->route('orders.success');
+                }
+            } else if (
+                $result["PaymentType"] == 'WEBATM'
+            ){
+                $merchantOrderNo = $result["MerchantOrderNo"];
+                $order = Order::where('order_number', $merchantOrderNo)->first();
+                if ($order){
+                    $order->setToPaid();
+                    return redirect()->route('orders.success');
+                }
+            }
+        }
+        return redirect('/')->withErrors("MPG 錯誤 $status");
+    }
 
+    public function notify(Request $request){
+        $result = $this->validateMPGCallbackValues($request);
+        if ( is_array($result)){           
+            $merchantOrderNo = $result["MerchantOrderNo"];
+            $order = Order::where('order_number', $merchantOrderNo)->first();
+            if ($order){
+                $order->setToPaid();
+                return redirect()->route('orders.success');
+            }
+        }
+        return redirect('/')->withErrors($result);
     }
 
     public function pendingPaymentType(Request $request){
+        $result = $this->validateMPGCallbackValues($request);
+        if ( is_array($result)){           
+            if (
+                in_array($result["PaymentType"], [
+                    'VACC',
+                    'CVS',
+                    'BARCODE',
+                ])
+            ){
+                $merchantOrderNo = $result["MerchantOrderNo"];
+                $order = Order::where('order_number', $merchantOrderNo)->first();
+                if ($order){
+                    $order->setToPending();
+                    return redirect()->route('orders.success');
+                }
+            }
+        }
+        return redirect('/')->withErrors($result);
+    }
+
+    
+    private function validateMPGCallbackValues(Request $request){
         $status = $request->input('Status');
         $merchantID = $request->input('MerchantID');
         $version = $request->input('Version');
@@ -100,21 +115,13 @@ class OrderController extends Controller
                 $version == env('MPG_Version') &&
                 $tradeSha == $tradeShaForTest
             ){
-
+                
                 $tradeInfoJSONString = $this->create_aes_decrypt($tradeInfo, $hashKey, $hashIV); 
                 $tradeInfoAry = json_decode($tradeInfoJSONString, true);
-                var_dump( $tradeInfoAry);
-                if (
-                    $tradeInfoAry["Result"]["PaymentType"] == 'ATM'
-                ){
-                    $merchantOrderNo = $tradeInfoAry["Result"]["MerchantOrderNo"];
-                    $order = Order::where('order_number', $merchantOrderNo)->first();
-                    if ($order){
-                        $order->setToPending();
-                        return redirect()->route('orders.success');
-                    }
-                }
-        }
+                return $tradeInfoAry["Result"];
+            }
+
+        return "MPG 錯誤 $status";
     }
 
     private function create_aes_decrypt($parameter = "", $key = "", $iv = "") {

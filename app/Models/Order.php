@@ -73,4 +73,10 @@ class Order extends Model
         $this->order_status = Order::orderStatusesIndex(self::PAID);
         $this->save();
     }
+
+    public function setToPending()
+    {
+        $this->order_status = Order::orderStatusesIndex(self::WAITING_FOR_THE_TRANSFER);
+        $this->save();
+    }
 }
