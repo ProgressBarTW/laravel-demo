@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -53,6 +54,7 @@ class OrderController extends Controller
                 $order = Order::where('order_number', $merchantOrderNo)->first();
                 if ($order){
                     $order->setToPaid();
+                    Auth::guard('web')->login($order->user);
                     return redirect()->route('orders.success');
                 }
             } else if (
@@ -62,6 +64,7 @@ class OrderController extends Controller
                 $order = Order::where('order_number', $merchantOrderNo)->first();
                 if ($order){
                     $order->setToPaid();
+                    Auth::guard('web')->login($order->user);
                     return redirect()->route('orders.success');
                 }
             }
@@ -72,14 +75,16 @@ class OrderController extends Controller
     public function notify(Request $request){
         $result = $this->validateMPGCallbackValues($request);
         if ( is_array($result)){           
+            Log::debug("notify: ".json_encode($result));
+
             $merchantOrderNo = $result["MerchantOrderNo"];
             $order = Order::where('order_number', $merchantOrderNo)->first();
             if ($order){
                 $order->setToPaid();
-                return redirect()->route('orders.success');
             }
         }
-        return redirect('/')->withErrors($result);
+
+        Log::debug("notify: ".$result);
     }
 
     public function pendingPaymentType(Request $request){
@@ -96,7 +101,8 @@ class OrderController extends Controller
                 $order = Order::where('order_number', $merchantOrderNo)->first();
                 if ($order){
                     $order->setToPending();
-                    var_dump($result);
+                    Auth::guard('web')->login($order->user);
+                    // var_dump($result);
                     return redirect()->route('orders.not_finished');
                 }
             }
