@@ -69,11 +69,6 @@ class OrderController extends Controller
                     $tradeInfoAry["Result"]["PaymentType"] == 'WEBATM'
                 ){
 
-                } else if (
-                    $tradeInfoAry["Result"]["PaymentType"] == 'ATM'
-                ){
-                    var_dump($tradeInfoAry );
-
                 }
         }
 
@@ -87,6 +82,39 @@ class OrderController extends Controller
 
     public function notify(){
 
+    }
+
+    public function pendingPaymentType(){
+        $status = $request->input('Status');
+        $merchantID = $request->input('MerchantID');
+        $version = $request->input('Version');
+        $tradeInfo = $request->input('TradeInfo');
+        $tradeSha = $request->input('TradeSha');
+
+        $hashKey = env('MPG_HashKey', '');
+        $hashIV = env('MPG_HashIV', '');
+        $tradeShaForTest = strtoupper(hash("sha256", "HashKey={$hashKey}&{$tradeInfo}&HashIV={$hashIV}"));
+        
+        if (    $status == 'SUCCESS' && 
+                $merchantID == env('MPG_MerchantID') &&
+                $version == env('MPG_Version') &&
+                $tradeSha == $tradeShaForTest
+            ){
+
+                $tradeInfoJSONString = $this->create_aes_decrypt($tradeInfo, $hashKey, $hashIV); 
+                $tradeInfoAry = json_decode($tradeInfoJSONString, true);
+
+                if (
+                    $tradeInfoAry["Result"]["PaymentType"] == 'ATM'
+                ){
+                    $merchantOrderNo = $tradeInfoAry["Result"]["MerchantOrderNo"];
+                    $order = Order::where('order_number', $merchantOrderNo)->first();
+                    if ($order){
+                        $order->setToPending();
+                        return redirect()->route('orders.success');
+                    }
+                }
+        }
     }
 
     private function create_aes_decrypt($parameter = "", $key = "", $iv = "") {
