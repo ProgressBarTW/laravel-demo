@@ -83,9 +83,11 @@ class OrderController extends Controller
             if ($order){
                 $order->setToPaid();
             }
+            return;
         }
 
-        Log::debug("notify: ".$result);
+        Log::debug("notify: ". $result);
+        return;
     }
 
     public function pendingPaymentType(Request $request){
