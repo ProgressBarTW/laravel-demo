@@ -80,11 +80,11 @@ class OrderController extends Controller
         ]);
     }
 
-    public function notify(){
+    public function notify(Request $request){
 
     }
 
-    public function pendingPaymentType(){
+    public function pendingPaymentType(Request $request){
         $status = $request->input('Status');
         $merchantID = $request->input('MerchantID');
         $version = $request->input('Version');
