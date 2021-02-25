@@ -103,7 +103,7 @@ class OrderController extends Controller
 
                 $tradeInfoJSONString = $this->create_aes_decrypt($tradeInfo, $hashKey, $hashIV); 
                 $tradeInfoAry = json_decode($tradeInfoJSONString, true);
-
+                var_dump( $tradeInfoAry);
                 if (
                     $tradeInfoAry["Result"]["PaymentType"] == 'ATM'
                 ){
