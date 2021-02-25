@@ -67,7 +67,10 @@ class OrderController extends Controller
                     }
                 } else if (
                     $tradeInfoAry["Result"]["PaymentType"] == 'WEBATM'
-                    // $tradeInfoAry["Result"]["PayBankCode"] == '00' 
+                ){
+
+                } else if (
+                    $tradeInfoAry["Result"]["PaymentType"] == 'ATM'
                 ){
                     var_dump($tradeInfoAry );
 
