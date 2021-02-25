@@ -52,7 +52,7 @@ class OrderController extends Controller
             ){
 
                 $tradeInfoJSONString = $this->create_aes_decrypt($tradeInfo, $hashKey, $hashIV); 
-                $tradeInfoAry = json_decode($tradeInfoJSONString);
+                $tradeInfoAry = json_decode($tradeInfoJSONString, true);
                 if (
                     $tradeInfoAry["Status"] == 'SUCCESS' &&
                     $tradeInfoAry["Result"]["RespondCode"] == '00' &&
