@@ -74,7 +74,7 @@ class OrderController extends Controller
                 }
         }
 
-        return redirect('/')->withErrors("MPG 錯誤 $status");
+        // return redirect('/')->withErrors("MPG 錯誤 $status");
     }
 
     public function success(Request $request){
