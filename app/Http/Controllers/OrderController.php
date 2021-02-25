@@ -54,18 +54,23 @@ class OrderController extends Controller
 
                 $tradeInfoJSONString = $this->create_aes_decrypt($tradeInfo, $hashKey, $hashIV); 
                 $tradeInfoAry = json_decode($tradeInfoJSONString, true);
-                var_dump($tradeInfoAry );
+
                 if (
-                    $tradeInfoAry["Status"] == 'SUCCESS' &&
-                    $tradeInfoAry["Result"]["RespondCode"] == '00' &&
-                    $tradeInfoAry["Result"]["PaymentMethod"] == 'CREDIT' 
+                    $tradeInfoAry["Result"]["PaymentMethod"] == 'CREDIT' &&
+                    $tradeInfoAry["Result"]["RespondCode"] == '00' 
                 ){
                     $merchantOrderNo = $tradeInfoAry["Result"]["MerchantOrderNo"];
                     $order = Order::where('order_number', $merchantOrderNo)->first();
                     if ($order){
                         $order->setToPaid();
-                        // return redirect()->route('orders.success');
+                        return redirect()->route('orders.success');
                     }
+                } else if (
+                    $tradeInfoAry["Result"]["PaymentMethod"] == 'WEBATM'
+                    // $tradeInfoAry["Result"]["PayBankCode"] == '00' 
+                ){
+                    var_dump($tradeInfoAry );
+
                 }
         }
 
