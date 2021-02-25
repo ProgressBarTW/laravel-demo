@@ -56,7 +56,7 @@ class OrderController extends Controller
                 $tradeInfoAry = json_decode($tradeInfoJSONString, true);
 
                 if (
-                    $tradeInfoAry["Result"]["PaymentMethod"] == 'CREDIT' &&
+                    $tradeInfoAry["Result"]["PaymentType"] == 'CREDIT' &&
                     $tradeInfoAry["Result"]["RespondCode"] == '00' 
                 ){
                     $merchantOrderNo = $tradeInfoAry["Result"]["MerchantOrderNo"];
@@ -66,7 +66,7 @@ class OrderController extends Controller
                         return redirect()->route('orders.success');
                     }
                 } else if (
-                    $tradeInfoAry["Result"]["PaymentMethod"] == 'WEBATM'
+                    $tradeInfoAry["Result"]["PaymentType"] == 'WEBATM'
                     // $tradeInfoAry["Result"]["PayBankCode"] == '00' 
                 ){
                     var_dump($tradeInfoAry );
