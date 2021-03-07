@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderSuccessEmail;
+use App\Jobs\SendOrderEmail;
 
 class OrderController extends Controller
 {
@@ -28,6 +31,11 @@ class OrderController extends Controller
         if (!$order){
             return redirect()->route('orders.index')->withErrors('沒有這個訂單');
         }
+
+        // SendOrderEmail::dispatch();
+        Mail::to("demo.progressbar.tw@gmail.com")->queue(
+            new OrderSuccessEmail($order)
+        );
 
         return view('orders.show', [
             'order' => $order

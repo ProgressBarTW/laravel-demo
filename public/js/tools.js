@@ -10,7 +10,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "initCartDeleteButton": () => /* binding */ initCartDeleteButton
+/* harmony export */   "initCartDeleteButton": () => (/* binding */ initCartDeleteButton)
 /* harmony export */ });
 function initCartDeleteButton(actionUrl) {
   var cartDeleteBtns = document.querySelectorAll('.cartDeleteBtn');
@@ -52,7 +52,7 @@ function initCartDeleteButton(actionUrl) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -111,7 +111,7 @@ var imageUploader = function imageUploader(containers) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _imageUploader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./imageUploader */ "./resources/js/imageUploader.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
@@ -203,25 +203,6 @@ var initProductOptionsTable = function initProductOptionsTable(add_button, conta
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (initProductOptionsTable);
 
-/***/ }),
-
-/***/ "./resources/js/tools.js":
-/*!*******************************!*\
-  !*** ./resources/js/tools.js ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _imageUploader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./imageUploader */ "./resources/js/imageUploader.js");
-/* harmony import */ var _initProductOptionsTable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./initProductOptionsTable */ "./resources/js/initProductOptionsTable.js");
-/* harmony import */ var _cart__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./cart */ "./resources/js/cart.js");
-
-
-
-window.imageUploader = _imageUploader__WEBPACK_IMPORTED_MODULE_0__.default;
-window.initProductOptionsTable = _initProductOptionsTable__WEBPACK_IMPORTED_MODULE_1__.default;
-window.initCartDeleteButton = _cart__WEBPACK_IMPORTED_MODULE_2__.initCartDeleteButton;
-
 /***/ })
 
 /******/ 	});
@@ -264,7 +245,7 @@ window.initCartDeleteButton = _cart__WEBPACK_IMPORTED_MODULE_2__.initCartDeleteB
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
@@ -279,9 +260,23 @@ window.initCartDeleteButton = _cart__WEBPACK_IMPORTED_MODULE_2__.initCartDeleteB
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-/******/ 	// startup
-/******/ 	// Load entry module
-/******/ 	__webpack_require__("./resources/js/tools.js");
-/******/ 	// This entry module used 'exports' so it can't be inlined
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!*******************************!*\
+  !*** ./resources/js/tools.js ***!
+  \*******************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _imageUploader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./imageUploader */ "./resources/js/imageUploader.js");
+/* harmony import */ var _initProductOptionsTable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./initProductOptionsTable */ "./resources/js/initProductOptionsTable.js");
+/* harmony import */ var _cart__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./cart */ "./resources/js/cart.js");
+
+
+
+window.imageUploader = _imageUploader__WEBPACK_IMPORTED_MODULE_0__.default;
+window.initProductOptionsTable = _initProductOptionsTable__WEBPACK_IMPORTED_MODULE_1__.default;
+window.initCartDeleteButton = _cart__WEBPACK_IMPORTED_MODULE_2__.initCartDeleteButton;
+})();
+
 /******/ })()
 ;

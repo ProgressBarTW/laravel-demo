@@ -28,52 +28,56 @@ class CartController extends Controller
     public function checkout(Request $request){
 
         $order = $this->createOrderByCart($request);
-        if (empty($order)){
-            return redirect()->route('cart.index')->withErrors('購物車是空的');
-        }
         
-        $hashKey = env('MPG_HashKey', '');
-        $hashIV = env('MPG_HashIV', '');
-        $expireDaysToPlus = env('MPG_ExpireDate', '');
-        $tradeInfoAry = [
-            'MerchantID' => env('MPG_MerchantID', ''),
-            'Version' => env('MPG_Version', ''),
-            'RespondType' => env('MPG_RespondType', ''),
-            'TimeStamp' => time(),
-            'LangType' => env('MPG_LangType', ''),
-            'MerchantOrderNo' => $order->order_number,
-            'Amt' => $order->amount,
-            'ItemDesc' => '一堆水果',
-            'TradeLimit' => env('MPG_TradeLimit', ''),
-            'ExpireDate' => date('Ymd', strtotime(date(''). "+ $expireDaysToPlus days")),
-            'Email' => $order->user->email,
-            'EmailModify' => env('MPG_EmailModify', ''),
-            'LoginType' => env('MPG_LoginType', ''),
-            'OrderComment' => '收到請冷藏',
-            'CREDIT' => env('MPG_CREDIT', ''),
-            'InstFlag' => env('MPG_InstFlag', ''),
-            'WEBATM' => env('MPG_WEBATM', ''),
-            'VACC' => env('MPG_VACC', ''),
-            'CVS' => env('MPG_CVS', ''),
-            'BARCODE' => env('MPG_BARCODE', ''),
-            //'CVSCOM' => '3',
-            'ReturnURL' => env('APP_URL') . env('MPG_ReturnURL', ''),
-            'NotifyURL' => env('APP_URL') . env('MPG_NotifyURL', ''),
-            'CustomerURL' => env('APP_URL') . env('MPG_CustomerURL', ''),
-            'ClientBackURL' => env('APP_URL') . env('MPG_ClientBackURL', ''),
-        ];
+        return redirect()->route('orders.success');
 
-        $tradeInfo = $this->create_mpg_aes_encrypt($tradeInfoAry, $hashKey, $hashIV); 
-        $tradeSha = strtoupper(hash("sha256", "HashKey={$hashKey}&{$tradeInfo}&HashIV={$hashIV}"));
-        $actionUrl = 'https://ccore.newebpay.com/MPG/mpg_gateway';
 
-        return view('cart.checkout', [
-            'actionUrl' => $actionUrl,
-            'merchantID' => $tradeInfoAry['MerchantID'],
-            'tradeInfo' => $tradeInfo,
-            'tradeSha' => $tradeSha,
-            'version' => $tradeInfoAry['Version'],
-        ]);
+        // if (empty($order)){
+        //     return redirect()->route('cart.index')->withErrors('購物車是空的');
+        // }
+        
+        // $hashKey = env('MPG_HashKey', '');
+        // $hashIV = env('MPG_HashIV', '');
+        // $expireDaysToPlus = env('MPG_ExpireDate', '');
+        // $tradeInfoAry = [
+        //     'MerchantID' => env('MPG_MerchantID', ''),
+        //     'Version' => env('MPG_Version', ''),
+        //     'RespondType' => env('MPG_RespondType', ''),
+        //     'TimeStamp' => time(),
+        //     'LangType' => env('MPG_LangType', ''),
+        //     'MerchantOrderNo' => $order->order_number,
+        //     'Amt' => $order->amount,
+        //     'ItemDesc' => '一堆水果',
+        //     'TradeLimit' => env('MPG_TradeLimit', ''),
+        //     'ExpireDate' => date('Ymd', strtotime(date(''). "+ $expireDaysToPlus days")),
+        //     'Email' => $order->user->email,
+        //     'EmailModify' => env('MPG_EmailModify', ''),
+        //     'LoginType' => env('MPG_LoginType', ''),
+        //     'OrderComment' => '收到請冷藏',
+        //     'CREDIT' => env('MPG_CREDIT', ''),
+        //     'InstFlag' => env('MPG_InstFlag', ''),
+        //     'WEBATM' => env('MPG_WEBATM', ''),
+        //     'VACC' => env('MPG_VACC', ''),
+        //     'CVS' => env('MPG_CVS', ''),
+        //     'BARCODE' => env('MPG_BARCODE', ''),
+        //     //'CVSCOM' => '3',
+        //     'ReturnURL' => env('APP_URL') . env('MPG_ReturnURL', ''),
+        //     'NotifyURL' => env('APP_URL') . env('MPG_NotifyURL', ''),
+        //     'CustomerURL' => env('APP_URL') . env('MPG_CustomerURL', ''),
+        //     'ClientBackURL' => env('APP_URL') . env('MPG_ClientBackURL', ''),
+        // ];
+
+        // $tradeInfo = $this->create_mpg_aes_encrypt($tradeInfoAry, $hashKey, $hashIV); 
+        // $tradeSha = strtoupper(hash("sha256", "HashKey={$hashKey}&{$tradeInfo}&HashIV={$hashIV}"));
+        // $actionUrl = 'https://ccore.newebpay.com/MPG/mpg_gateway';
+
+        // return view('cart.checkout', [
+        //     'actionUrl' => $actionUrl,
+        //     'merchantID' => $tradeInfoAry['MerchantID'],
+        //     'tradeInfo' => $tradeInfo,
+        //     'tradeSha' => $tradeSha,
+        //     'version' => $tradeInfoAry['Version'],
+        // ]);
     }
 
     public function addToCart(Request $request) {
