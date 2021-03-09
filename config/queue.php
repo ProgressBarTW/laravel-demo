@@ -41,6 +41,13 @@ return [
             'retry_after' => 90,
         ],
 
+        'numbers' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'one,two,three',
+            'retry_after' => 90,
+        ],
+
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => 'localhost',

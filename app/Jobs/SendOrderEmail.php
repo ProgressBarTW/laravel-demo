@@ -16,15 +16,13 @@ class SendOrderEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $order;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($order)
+    public function __construct()
     {
-        $this->order = $order;
     }
 
     /**
@@ -34,8 +32,9 @@ class SendOrderEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to("demo.progressbar.tw@gmail.com")->send(
-            new OrderSuccessEmail($this->order)
-        );
+        Log::debug("This is debug log.");
+        Log::error("001");
+        sleep(10);
+        Log::error("002");
     }
 }

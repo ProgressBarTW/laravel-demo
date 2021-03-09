@@ -32,10 +32,25 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->withErrors('沒有這個訂單');
         }
 
-        // SendOrderEmail::dispatch();
-        Mail::to("demo.progressbar.tw@gmail.com")->queue(
-            new OrderSuccessEmail($order)
-        );
+        // SendOrderEmail::dispatch()->onQueue('one');
+
+        dispatch(function () {
+            Log::error("Closures three");
+        })->onQueue('three');
+        
+        dispatch(function () {
+            Log::error("Closures two");
+        })->onQueue('two');
+
+        dispatch(function () {
+            Log::error("Closures one");
+        })->onQueue('one');
+       
+
+        
+        // Mail::to("demo.progressbar.tw@gmail.com")->queue(
+        //     new OrderSuccessEmail($order)
+        // );
 
         return view('orders.show', [
             'order' => $order
